@@ -1,0 +1,11 @@
+services:
+  app:
+    image: "node:latest"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+      - API_KEY=${API_KEY}
+    network_mode: host
+    command: >
+      npx @jetforge/bambu-bridge@latest -y start

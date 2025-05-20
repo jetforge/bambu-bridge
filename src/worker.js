@@ -50,10 +50,11 @@ export default class Worker {
 
 
 	initClient(printer) {
+		console.log("init client for " + printer.id);
 		this.clients[printer.id] = new BambuClient({
-			host: printer.host,
-			accessToken: printer.access_token,
-			serialNumber: printer.serial_number,
+			host: printer.options.host,
+			accessToken: printer.options.access_token,
+			serialNumber: printer.options.serial_number,
 			model: printer.model,
 			onPrintMessage: message => {
 				this.statuses[printer.id] = {
@@ -127,25 +128,32 @@ export default class Worker {
 						continue;
 					}
 
-					if (this.clients[printer.id].accessToken !== printer.access_token) {
+					if (this.clients[printer.id].accessToken !== printer.options.access_token) {
+						console.log("removing due to access token change for " + printer.id);
+						console.log("old access token: " + this.clients[printer.id].accessToken);
+						console.log("new access token: " + printer.access_token);
 						this.removeClient(printer.id);
 						continue;
 					}
 
-					if (this.clients[printer.id].host !== printer.host) {
+					if (this.clients[printer.id].host !== printer.options.host) {
+						console.log("removing due to host change for " + printer.id);
+						this.removeClient(printer.id);
+						continue;
+					}
+
+					if (this.clients[printer.id].serialNumber !== printer.options.serial_number) {
+						console.log("removing due to serial number change for " + printer.id);
 						this.removeClient(printer.id);
 						continue;
 					}
 
 					if (this.clients[printer.id].model !== printer.model) {
+						console.log("removing due to model change for " + printer.id);
 						this.removeClient(printer.id);
 						continue;
 					}
 
-					if (this.clients[printer.id].serialNumber !== printer.serial_number) {
-						this.removeClient(printer.id);
-						continue;
-					}
 
 				}
 

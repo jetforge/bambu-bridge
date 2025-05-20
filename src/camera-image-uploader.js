@@ -22,7 +22,7 @@ export default class CameraImageUploader {
 		if (image) {
 			this.axiosInstance.post("/camera", {
 				printer_id: this.printerId,
-				image: image.toString('base64')
+				image: image
 			})
 				.then(() => {
 					// console.log("image uploaded");

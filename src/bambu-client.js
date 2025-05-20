@@ -30,7 +30,7 @@ export default class BambuClient {
 		});
 
 		this.mqttClient.on("connect", async (...args) => {
-			// console.log("connected");
+			console.log(this.host + " connected");
 
 			this.mqttClient.subscribe(`device/${serialNumber}/report`, (error) => {
 				if (error) {
@@ -44,6 +44,7 @@ export default class BambuClient {
 
 
 		this.mqttClient.on("disconnect", async (...args) => {
+			console.log(this.host + " disconnected");
 			this.onDisconnect?.();
 			if (typeof this.pushInterval !== "undefined") {
 				clearInterval(this.pushInterval);
@@ -54,7 +55,6 @@ export default class BambuClient {
 
 		this.mqttClient.on("message", (topic, message) => {
 			const payload = JSON.parse(message.toString());
-
 
 			if (payload.info) {
 				const otaModule = payload.info.module.find(module => module.name === "ota")
