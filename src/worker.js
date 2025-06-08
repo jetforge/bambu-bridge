@@ -105,6 +105,7 @@ export default class Worker {
 			.then(response => {
 				for (const command of response.data.commands) {
 					if (command.command === "start") {
+						console.log("start command received for " + command.printerId);
 						const buffer = Buffer.from(command.fileData, 'base64');
 						this.clients[command.printerId].uploadFile(command.fileName, buffer)
 							.then(() => {
@@ -113,7 +114,8 @@ export default class Worker {
 							})
 							.catch(error => {
 								console.log('upload error');
-								this.errors[command.printerId] = 'UPLOAD_FAILED';
+								console.log(error);
+								// this.errors[command.printerId] = 'UPLOAD_FAILED';
 							});
 					}
 

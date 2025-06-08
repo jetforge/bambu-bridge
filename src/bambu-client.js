@@ -291,7 +291,7 @@ export default class BambuClient {
 	}
 
 	async uploadFile(name, data) {
-		const client = new ftp.Client(300 * 1000);
+		const client = new ftp.Client(1800 * 1000);
 		client.ftp.verbose = true;
 
 		await client.access({
